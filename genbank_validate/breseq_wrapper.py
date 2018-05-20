@@ -19,7 +19,10 @@ CONTEXT_SETTINGS = dict(help_option_names=['-h','--help'], max_content_width=90)
 def breseq_wrapper():
     pass
 
-def merge_genbanks(output, *args):
+@breseq_wrapper.command(name='merge_genbanks')
+@click.option('-out','--output_gb', help='filename of output gb.', required=True, type=click.Path(exists=False))
+@click.option('-in','--input_list', help='list of two filenames for genbanks you want to merge.', required=True, type=click.Path(exists=False))
+def merge_genbanks(output_gb, *args):
     """merge a list of genebank files into the a file given by the first named argument.
 
     Args:
@@ -29,15 +32,17 @@ def merge_genbanks(output, *args):
     Returns:
         file: genbank format
     """
-    reformatted_genbank = args[0]
-    gbk_list = args[1:]
-    fhout = open(reformatted_genbank, 'w')
-    sys.stderr.write("Loading %s\n" % reformatted_genbank)
-    combined_record = SeqIO.read(reformatted_genbank, "genbank")
-
+    reformatted_genbank = output_gb
+    input_list = args[1:]
     print reformatted_genbank
-    print gbk_list
+    print input_list
     print args
+
+    # fhout = open(reformatted_genbank, 'w')
+    # sys.stderr.write("Loading %s\n" % reformatted_genbank)
+    # combined_record = SeqIO.read(reformatted_genbank, "genbank")
+
+
     # FIXME This function was working but I modified the input feed <SPG>
     # fhout = open(first_gb, 'w')
     # firstGbk = args[1]
@@ -55,7 +60,9 @@ def merge_genbanks(output, *args):
     # sys.stderr.write("Merging into one record\n")
     # SeqIO.write(combined_record, fhout, "genbank")
 
-def reformat_genbank(args):
+@breseq_wrapper.command(name='reformat_genbank')
+@click.argument('input_genbanks', nargs=-1, type=click.Path(), required=True)
+def reformat_genbank(input_genbanks):
     """Reformat genebank using biopython
     Currently adds numeric suffix to the end of the qualifiers "gene" and "dnas_title"
 
@@ -66,15 +73,16 @@ def reformat_genbank(args):
     Returns:
         file: genbank format
     """
-    gbk_list = args[0:]
-    for filename in gbk_list:
-        genbank_bname = filename[:filename.rfind('.g')]
+    # input_list = input_list[0:]
+    for fn in input_genbanks:
+        click.echo('loading %s ' % (fn))
+        genbank_bname = fn[:fn.rfind('.g')]
         result = genbank_bname + '.reformatted.gb'
         fhout = open(result, 'w')
-        sys.stderr.write("Loading %s\n" % filename)
+        sys.stderr.write("Loading %s\n" % fn)
         # changed read to parse:
-        for record in SeqIO.parse(filename, "genbank"):
-            # edited: record = SeqIO.read(filename, "genbank")
+        for record in SeqIO.parse(fn, "genbank"):
+            # edited: record = SeqIO.read(fn, "genbank")
             # enforce DNA specification
             record.seq.alphabet = generic_dna
             # make a new record and append the original DNA seq
