@@ -7,7 +7,7 @@ dependencies = ['click']
 
 setup(
     name='faketool',
-    version='0.1.0',
+    version='0.1.2',
     url='https://github.com/sgordon007/fake-tool',
     license='BSD',
     author='Sean Gordon',
@@ -18,7 +18,7 @@ setup(
     include_package_data=True,
     zip_safe=False,
     platforms='any',
-    install_requires=dependencies,
+    install_requires=['click', 'biopython'],
     entry_points={
         'console_scripts': [
             'genbank_validate = genbank_validate.cli:main',
