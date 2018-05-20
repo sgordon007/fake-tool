@@ -7,7 +7,7 @@ dependencies = ['click']
 
 setup(
     name='faketool',
-    version='0.1.3',
+    version='0.1.4',
     url='https://github.com/sgordon007/fake-tool',
     license='BSD',
     author='Sean Gordon',
