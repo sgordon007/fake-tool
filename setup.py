@@ -6,9 +6,9 @@ from setuptools import find_packages, setup
 dependencies = ['click']
 
 setup(
-    name='genbankvalidate',
+    name='faketool',
     version='0.1.0',
-    url='https://github.com/sgordon007/genbank-validate',
+    url='https://github.com/sgordon007/fake-tool',
     license='BSD',
     author='Sean Gordon',
     author_email='seangordon07@gmail.com',
